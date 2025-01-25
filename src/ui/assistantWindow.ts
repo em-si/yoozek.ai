@@ -20,7 +20,7 @@ const createAssistantWindow = async (): Promise<void> => {
         width: 800,
         height: 800,
         vibrancy: 'popover',
-        backgroundMaterial: 'acrylic',
+        backgroundColor: '#0000CD',
         webPreferences: {
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         }
