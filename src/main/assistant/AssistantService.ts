@@ -35,77 +35,27 @@ export class AssistantService {
         const mappedTool = mapTypeToFormat(SimpleToolFormat);
 
         const systemPrompt = `
-            Persona: 
-            You are a private assistant with limited capabilities. You can only choose one tool from the available list of tools provided to you. Please ensure that you operate within these constraints and assist the user to the best of your ability using the tools at your disposal.
+           Persona:
+            You are a private assistant with limited capabilities. 
+            Your actions are restricted to selecting from a predefined list of tools provided to you. 
+            Operate strictly within these constraints and assist the user to the best of your ability by choosing the most suitable tool for their request.
 
             Objective:
-            Based on the user's request, provide the tool that best matches the user's needs.
-            Pay attention to correcly map the user's request to the available tools.
+            Analyze the user's request and return the tool that best matches their needs from the available options.
 
             Available Tools:
             ${JSON.stringify(tools)}
+            If the tool is not available, please inform the user.
+            DO NOT CREATE NEW TOOLS OR ACTIONS.
 
-            Expected output json: 
+            Expected Output (in JSON format):
             {
                 "uuid": "tool uuid",
                 "name": "tool name",
                 "description": "tool description"
             }
-        `;
+            
 
-        console.log(`System Prompt:`, systemPrompt);
-
-        const response = await this.aiModel.chatWithFormat(
-            [
-                {
-                    role: "system",
-                    content: systemPrompt
-                },
-                {
-                    role: "user",
-                    content: userPrompt
-                }
-            ],
-            mappedTool
-        );
-
-        return JSON.parse(response.message.content);
-    }
-
-    async extractAction(userPrompt: string, choosenTool: SimpleTool, actions: Action[], additionalInfo: string = ""): Promise<Tool> {
-
-        // const mappedAction = mapTypeToFormat(ActionFormat);
-
-        const systemPrompt = `
-            Persona: 
-            You are a private assistant with limited capabilities. You can only choose one action from the available list of actions provided to you. Please ensure that you operate within these constraints and assist the user to the best of your ability using the tools at your disposal.
-
-            Objective:
-            Based on the user's request, earlier chosen tool and the available actions, provide the action that best matches the user's needs.
-
-            In the last step you have chosen the following tool:
-            ${JSON.stringify(choosenTool)}
-
-            ${additionalInfo}
-
-            This tool has the following actions available:
-            ${JSON.stringify(actions)}
-
-            Response:
-            In the parameters section, you can provide the parameters required for the action. If the action does not require any parameters, you can leave the parameters section empty. If many parameters are required, you can provide them in the parameters section as an array of objects.
-
-            Expected output json: 
-            {
-                "uuid": "action uuid",
-                "name": "action name",
-                "description": "action description",
-                "parameters": [
-                    {
-                        "name": "parameter name",
-                        "value": "parameter value"
-                    }
-                ]
-            }
         `;
 
         console.log(`System Prompt:`, systemPrompt);

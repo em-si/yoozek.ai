@@ -23,5 +23,5 @@ export type Action = {
 
 export type Parameter = {
     name: string;
-    value: string | number | boolean;
+    value: string | number | boolean | Date;
 };
