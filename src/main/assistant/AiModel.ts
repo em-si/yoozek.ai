@@ -15,7 +15,7 @@ export type AiResponse = {
     prompt_eval_duration: number;
     eval_count: number;
     eval_duration: number;
-}
+};
 
 export type AiGenerateResponse = AiResponse & {
     response: string;
@@ -30,39 +30,48 @@ export interface AiModel {
     httpClient: HttpClient;
     model: string;
 
-    generate(prompt: string, stream: boolean, jsonFormat: boolean): Promise<AiGenerateResponse>;
-    chat(messages: AiChatMessage[], stream: boolean, format: Record<string, string>): Promise<AiChatResponse>;
-}
+    generate(prompt: string, jsonFormat: boolean): Promise<AiGenerateResponse>;
+    chatWithFormat(messages: AiChatMessage[], format: Record<string, string>): Promise<AiChatResponse>;
+    chat(messages: AiChatMessage[]): Promise<AiChatResponse>;
+};
 
 export const Llama323: AiModel = {
 
     httpClient: new HttpClient("http://localhost:11434/api"),
     model: "phi:latest",
 
-    async generate(prompt: string, stream: boolean = false, jsonFormat: boolean = false): Promise<AiGenerateResponse> {
+    async generate(prompt: string, jsonFormat: boolean = false): Promise<AiGenerateResponse> {
 
         if (jsonFormat) {
             return this.httpClient.post("/generate", {
                 model: this.model,
-                stream: stream,
                 prompt: prompt,
+                stream: false,
                 format: "json",
             })
         } else {
             return this.httpClient.post("/generate", {
                 model: this.model,
-                stream: stream,
+                stream: false,
                 prompt: prompt,
             })
         }
     },
 
-    async chat(messages: AiChatMessage[], stream: boolean = false, format: Record<string, string>): Promise<AiChatResponse> {
+    async chatWithFormat(messages: AiChatMessage[], format: Record<string, string>): Promise<AiChatResponse> {
         return this.httpClient.post("/chat", {
             model: this.model,
-            stream: stream,
             messages: messages,
+            stream: false,
             format: format
+        })
+    },
+
+    async chat(messages: AiChatMessage[]): Promise<AiChatResponse> {
+        return this.httpClient.post("/chat", {
+            model: this.model,
+            messages: messages,
+            stream: false,
         })
     }
 }

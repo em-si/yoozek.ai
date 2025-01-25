@@ -1,35 +1,33 @@
 
 import { Llama323 } from "./assistant/AiModel";
 import { AssistantService } from "./assistant/AssistantService";
-import { availableTools } from "./tools";
-import { Tool, toolToSimple } from "./types/generalTypes";
-
+import { getZones } from "./haservice/haservices";
+import { availableTools, homeAssistantTool } from "./tools";
+import { Action, Tool, toolToSimple } from "./types/generalTypes";
 
 export const yoozek = async (userMessage: string): Promise<string> => {
 
     const assistant = new AssistantService(Llama323);
 
-    const response = await assistant.reasoning(
+    const simpleTool = await assistant.extractTool(
         userMessage,
         availableTools.map(toolToSimple)
     );
 
-    console.log(`Response: ${response.name}`);
+    const tool = availableTools.find((t: Tool) => t.uuid === simpleTool.uuid);
 
-    return response.name
+    console.log(`\n\nTool:`, simpleTool);
+
+    let action: Action;
+
+    if (tool.uuid === homeAssistantTool.uuid) {
+        action = await assistant.extractAction(userMessage, simpleTool, tool.actions, `Available zones in which the action can be performed: 
+            ${JSON.stringify(getZones())}`);
+    } else {
+        action = await assistant.extractAction(userMessage, simpleTool, tool.actions);
+    }
+
+    console.log(`\n\nAction:`, action);
+
+    return action.uuid;
 }
-
-// curl http://localhost:11434/api/chat -d '{
-// "model": "phi:latest",
-//     "messages": [
-//         {
-//             "role": "user",
-//             "content": "how to implement grid in jetpack compose"
-//         },
-//         {
-//             "role": "system",
-//             "content": "You are a home assistant. You cannot assist in other tasks than managing the home. When user asks for something else, response should be: "I am a home assistant.I can only assist in managing the home" 
-//     }
-//     ],
-//         "stream": false
-//   }'
