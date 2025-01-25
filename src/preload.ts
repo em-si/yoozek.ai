@@ -6,14 +6,12 @@ import {contextBridge, ipcRenderer} from "electron";
 
 contextBridge.exposeInMainWorld('listeners', {
     assistantMessage: (func: (message: string) => void) => {
-        ipcRenderer.on('new-assistant-message', (__, message) => {
+        ipcRenderer.on('new-assistant-message-entry', (__, message) => {
             func(message);
         });
     },
-    userMessage: (func: (message: string) => void) => {
-        ipcRenderer.on('new-user-message', (__, message) => {
-            func(message);
-        });
+    userMessage: (message: string) => {
+        ipcRenderer.send('user-message', message);
     },
     showProgressBar: (func: (show: boolean) => void) => {
         ipcRenderer.on('show-progress-bar', (__) => {

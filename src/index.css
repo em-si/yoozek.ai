@@ -1,3 +1,7 @@
+html, body {
+  height: 100%;
+}
+
 body {
   font-family: Arial, sans-serif;
   color: white;
@@ -6,10 +10,16 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
   margin: 0;
   padding: 20px;
   box-sizing: border-box;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 
 .progress-bar {
@@ -36,43 +46,6 @@ body {
   100% {
     transform: translateX(100%);
   }
-}
-
-.chat-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  overflow-y: auto;
-}
-
-.message {
-  padding: 10px 15px;
-  margin: 10px 0;
-  border-radius: 15px;
-  max-width: 80%;
-  font-size: 14px;
-  line-height: 1.4;
-  word-wrap: break-word;
-}
-
-/* Stylowanie wiadomości wyrównanej do lewej */
-.message-left {
-  visibility: hidden;
-  background: rgba(129, 199, 132, 0.65); /* Kolor wiadomości od asystenta */
-  align-self: flex-start;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 15px;
-}
-
-/* Stylowanie wiadomości wyrównanej do prawej */
-.message-right {
-  visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  background: rgba(76, 175, 80, 0.65); /* Kolor wiadomości od użytkownika */
-  align-self: flex-end;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 15px;
 }
 
 .icon-container {

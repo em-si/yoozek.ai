@@ -27,41 +27,14 @@
  */
 
 import './index.css';
+import './renderer/index'
 
-window.listeners.userMessage((message: string) => {
-    const userMessage = document.getElementById('userMessage');
-    if (userMessage) {
-        userMessage.innerText = message;
-        userMessage.style.visibility = 'visible';
-    }
-})
-
-window.listeners.assistantMessage((message: string) => {
-    const container = document.getElementById('assistantMessageContainer');
-    const assistantMessage = document.getElementById('assistantMessage');
-    if (container && assistantMessage) {
-        container.style.visibility = 'visible';
-        assistantMessage.innerText = message;
-    }
-})
-
-window.listeners.showProgressBar((show: boolean) => {
-    const progressBar = document.getElementById('progressBar');
-    if (progressBar) {
-        progressBar.style.display = show ? 'block' : 'none';
-    }
-})
-
-document.getElementById('clipboardIcon').addEventListener('click', () => {
-    const content = document.getElementById('assistantMessage').innerText
-    window.listeners.onClipboardClick(content);
-})
 
 declare global {
     interface Window {
         listeners: {
-            assistantMessage: (callback: (message: string) => void) => void;
-            userMessage: (callback: (message: string) => void) => void;
+            assistantMessage: (callback: (message: {id?: string, content: string}) => void) => void;
+            userMessage: (message: {id?: string, content: string}) => void;
             showProgressBar: (func: (show: boolean) => void) => void;
             onClipboardClick: (content: string) => void;
         };
