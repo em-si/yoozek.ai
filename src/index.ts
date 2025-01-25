@@ -1,6 +1,7 @@
 import { app, BrowserWindow, clipboard, ipcMain } from 'electron';
 import { createAssistantWindow, setAssistantMessage } from "./ui/assistantWindow";
 import { useUserMessage } from "./main/hooks/useUserMessage";
+import { yoozek } from './main/yoozek';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -11,8 +12,9 @@ const createWindow = async (): Promise<void> => {
     // Create the browser window.
     await createAssistantWindow();
     // TODO Tutaj piszecie swój zajebisty kod :D
-    useUserMessage((message) => {
-        setAssistantMessage(message.text)
+    useUserMessage(async (message) => {
+        const response = await yoozek(message.text);
+        setAssistantMessage(response);
     });
 };
 
