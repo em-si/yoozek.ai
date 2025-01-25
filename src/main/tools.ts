@@ -62,15 +62,19 @@ export const todoTool : Tool = {
 
         ---
 
-        "The Todo is a specialized tool designed for effective task management and organization, leveraging a local language model. It enables users to create, edit, and manage their to-do lists and tasks through intuitive natural language interactions, with a focus on simplicity and precision. The tool is designed to interpret user commands and automatically classify them into one of three categories: **Note**, **Task**, or **Tag**, ensuring that user intentions are seamlessly captured and organized.
+        "The Todo is a specialized tool designed for effective task management and organization, leveraging a local language model. 
+        It enables users to create, edit, and manage their to-do lists and tasks through intuitive natural language interactions, with a focus on simplicity and precision. 
+        The tool is designed to interpret user commands and automatically classify them into one of three categories: **Note**, **Task**, or **Tag**, ensuring that user intentions are seamlessly captured and organized.
 
-        - **Notes** are freeform textual entries designed to capture thoughts, ideas, or unstructured information related to personal or project planning. Example: 'Write down the idea for the meeting topic.'
+        - **Notes** are freeform textual entries designed to capture thoughts, ideas, or unstructured information related to personal or project planning. Example: 'Write down the idea for the meeting topic. Example 2: Write the shopping list.'
         
         - **Tasks** represent actionable items that require completion, often tied to specific deadlines or priorities. Example: 'Set a reminder to buy groceries by 5 PM tomorrow.'
 
         - **Tags** are used to label or categorize items for better organization and quick retrieval. Example: 'Mark this task as urgent' or 'Add a "work" tag to this note.'
 
-        The Todo system is designed to recognize natural language commands for these functions while avoiding overlap with other systems, such as home automation. It operates independently of any home-related task, focusing solely on personal productivity and task management. This ensures that interactions such as 'Create a task to call John' are strictly handled by the Todo system, without interfering with commands related to controlling lights, sensors, or other smart home features.
+        The Todo system is designed to recognize natural language commands for these functions while avoiding overlap with other systems, such as home automation. 
+        It operates independently of any home-related task, focusing solely on personal productivity and task management. 
+        This ensures that interactions such as 'Create a task to call John' are strictly handled by the Todo system, without interfering with commands related to controlling lights, sensors, or other smart home features.
 
         By maintaining a clear distinction between task management and home control, the Todo system delivers a focused, distraction-free experience tailored to productivity. The tool processes all interactions locally, ensuring privacy and offline functionality, while providing users with an intuitive, efficient way to stay organized."
 
