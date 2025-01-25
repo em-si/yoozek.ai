@@ -209,6 +209,18 @@ const garden: Zone = {
             state: [
                 { name: "power", value: false }
             ]
+        },
+        {
+            uuid: "garden-device-3",
+            name: "Humidity sensor",
+            description: "Humidity sensor in the garden",
+            actions: [
+                { uuid: "action-32", name: "Turn on", description: "Turn on the humidity sensor in the garden", parameters: [{ name: "power", value: true }] },
+                { uuid: "action-33", name: "Turn off", description: "Turn off the humidity sensor in the garden", parameters: [{ name: "power", value: false }] },
+                { uuid: "action-34", name: "Get value", description: "Get value of the humidity sensor in the garden", parameters: [{ name: "humidity", value: 85 }] },
+            ],
+            state: [
+                { name: "power", value: false }
         }
     ]
 }
