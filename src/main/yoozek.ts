@@ -6,29 +6,34 @@ import { Action, Tool, toolToSimple } from "./types/generalTypes";
 
 export const yoozek = async (userMessage: string): Promise<string> => {
 
-    const assistant = new AssistantService(Llama323);
+    try {
+        const assistant = new AssistantService(Llama323);
 
-    const simpleTool = await assistant.extractTool(
-        userMessage,
-        availableTools.map(toolToSimple)
-    );
+        const simpleTool = await assistant.extractTool(
+            userMessage,
+            availableTools.map(toolToSimple)
+        );
 
-    const tool = availableTools.find((t: Tool) => t.uuid === simpleTool.uuid);
+        const tool = availableTools.find((t: Tool) => t.uuid === simpleTool.uuid);
 
-    console.log(`\n\nTool:`, simpleTool);
+        console.log(`\n\nTool:`, simpleTool);
 
-    let action: Action;
+        let action: Action;
 
-    if (tool.uuid === homeAssistantTool.uuid) {
-        action = await assistant.extractAction(userMessage, simpleTool, tool.actions, `Available zones in which the action can be performed: 
+        if (tool.uuid === homeAssistantTool.uuid) {
+            action = await assistant.extractAction(userMessage, simpleTool, tool.actions, `Available zones in which the action can be performed: 
             ${JSON.stringify(getZones())}`);
-    } else if (tool.uuid === todoTool.uuid) {
-        action = await assistant.extractAction(userMessage, simpleTool, tool.actions);
-    } else if (tool.uuid === informTool.uuid) {
-        return await assistant.informUser(userMessage)
+        } else if (tool.uuid === todoTool.uuid) {
+            action = await assistant.extractAction(userMessage, simpleTool, tool.actions);
+        } else if (tool.uuid === informTool.uuid) {
+            return await assistant.informUser(userMessage)
+        }
+
+        console.log(`\n\nAction:`, action);
+
+        return JSON.stringify(action) + "\n\n" + JSON.stringify(action);
+    } catch (error) {
+        console.error(error);
+        return "Something went wrong 🤷  Please try again.";
     }
-
-    console.log(`\n\nAction:`, action);
-
-    return JSON.stringify(action) + "\n\n" + JSON.stringify(action);
 }
