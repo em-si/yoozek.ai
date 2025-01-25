@@ -4,11 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const homeAssistantTool : Tool = {
     uuid: uuidv4(),
     name: "HomeAssistant",
-    description: `The HomeAssistant is an advanced integration tool designed to facilitate smart home automation and management using a local instance of a language model. 
-    It seamlessly connects with various smart devices, including lights, thermostats, cameras, and more, enabling efficient control and monitoring through natural language commands. 
-    In addition to its core automation capabilities, HomeAssistant provides tools to retrieve and manage information about the defined zones or areas within the home. 
-    This includes the ability to query the number of zones (or "strefy") configured in the system, allowing users to better understand and organize their smart home environment. 
-    For example, users can ask for details such as "How many zones are set up?" or "List all configured zones," ensuring precise and context-aware management of their smart devices and spaces.`,
+    description: "The HomeAssistant is an advanced integration tool designed to facilitate smart home automation and management using a local instance of a language model. It seamlessly connects with various smart devices, including lights, thermostats, cameras, and more, enabling efficient control and monitoring through natural language commands. ",
     actions:  [
         {
             uuid: uuidv4(),
@@ -58,28 +54,7 @@ export const homeAssistantTool : Tool = {
 export const todoTool : Tool = {
     uuid: uuidv4(),
     name: "Todo",
-    description: `
-
-        ---
-
-        "The Todo is a specialized tool designed for effective task management and organization, leveraging a local language model. 
-        It enables users to create, edit, and manage their to-do lists and tasks through intuitive natural language interactions, with a focus on simplicity and precision. 
-        The tool is designed to interpret user commands and automatically classify them into one of three categories: **Note**, **Task**, or **Tag**, ensuring that user intentions are seamlessly captured and organized.
-
-        - **Notes** are freeform textual entries designed to capture thoughts, ideas, or unstructured information related to personal or project planning. Example: 'Write down the idea for the meeting topic. Example 2: Write the shopping list.'
-        
-        - **Tasks** represent actionable items that require completion, often tied to specific deadlines or priorities. Example: 'Set a reminder to buy groceries by 5 PM tomorrow.'
-
-        - **Tags** are used to label or categorize items for better organization and quick retrieval. Example: 'Mark this task as urgent' or 'Add a "work" tag to this note.'
-
-        The Todo system is designed to recognize natural language commands for these functions while avoiding overlap with other systems, such as home automation. 
-        It operates independently of any home-related task, focusing solely on personal productivity and task management. 
-        This ensures that interactions such as 'Create a task to call John' are strictly handled by the Todo system, without interfering with commands related to controlling lights, sensors, or other smart home features.
-
-        By maintaining a clear distinction between task management and home control, the Todo system delivers a focused, distraction-free experience tailored to productivity. The tool processes all interactions locally, ensuring privacy and offline functionality, while providing users with an intuitive, efficient way to stay organized."
-
-        ---
-        `,
+    description: "The Todo is a specialized tool designed for effective task management and organization, leveraging a local language model. It is tailored to help users create, edit, and manage their to-do lists and tasks through intuitive natural language interactions.",
     actions: [
         {
             uuid: uuidv4(),
