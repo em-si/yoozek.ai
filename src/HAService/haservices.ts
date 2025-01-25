@@ -39,13 +39,33 @@ export function getStatus(deviceId: string): State[] | undefined {
 }
 
 export function getReport(deviceId: string, from: Date, to: Date): string {
-    // TODO: Implement your logic to generate a report for the device
-    return `Report for device ${deviceId} from ${from.toISOString()} to ${to.toISOString()}`;
+    for (const zone of zones) {
+        const device = zone.devices.find(d => d.uuid === deviceId);
+        if (device) {
+            const actions = device.actions.map(action => `  - ${action.name}: ${action.description}`).join("\n");
+            const states = device.state.map(state => `  - ${state.name}: ${state.value}`).join("\n");
+            return `Device Report:
+                    UUID: ${device.uuid}
+                    Name: ${device.name}
+                    Description: ${device.description}
+                    Actions:${actions}
+                    States:${states}`;
+        }
+    }
+    return undefined;
 }
 
 export function getReportForZone(zoneId: string, from: Date, to: Date): string {
-    // TODO: Implement your logic to generate a report for the zone
-    return `Report for zone ${zoneId} from ${from.toISOString()} to ${to.toISOString()}`;
+    const zone = zones.find(z => z.uuid === zoneId);
+    if (zone) {
+        const deviceReports = zone.devices.map(device => getReport(device.uuid,from,to)).join("\n\n");
+        return `Zone Report:
+                UUID: ${zone.uuid}
+                Name: ${zone.name}
+                Description: ${zone.description}
+                Devices:${deviceReports}`;
+    }
+    return undefined;
 }
 
 function updateDeviceState(device: Device, stateName: string, newValue: string | number | boolean): Device {
@@ -62,3 +82,5 @@ export function executeAction(device: Device, action: Action): Device {
     });
     return { ...device, state: updatedStates };
 }
+const zoneReport = getReportForZone("zone-1", new Date(), new Date());
+console.log(zoneReport);
