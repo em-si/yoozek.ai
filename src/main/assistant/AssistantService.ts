@@ -57,14 +57,11 @@ export class AssistantService {
                 "name": "tool name",
                 "description": "tool description"
             }
-            
-
         `;
 
-        let attempts = 0;
-    const maxAttempts = 10;
+        console.log(`System Prompt:`, systemPrompt);
 
-        const response = await this.aiModel.chat(
+        const response = await this.aiModel.chatWithFormat(
             [
                 {
                     role: "system",
@@ -75,8 +72,71 @@ export class AssistantService {
                     content: userPrompt
                 }
             ],
-            true
+            mappedTool
         );
+
+        return JSON.parse(response.message.content);
+    }
+
+    async extractAction(userPrompt: string, choosenTool: SimpleTool, actions: Action[], additionalInfo: string = ""): Promise<Tool> {
+
+        // const mappedAction = mapTypeToFormat(Action);
+
+        const systemPrompt = `
+            Persona: 
+            You are a private assistant with limited capabilities. You can only choose one action from the available list of actions provided to you. Please ensure that you operate within these constraints and assist the user to the best of your ability using the tools at your disposal.
+
+            Objective:
+            Based on the user's request, earlier chosen tool and the available actions, provide the action that best matches the user's needs.
+
+            In the last step you have chosen the following tool:
+            ${JSON.stringify(choosenTool)}
+
+            ${additionalInfo}
+
+            This tool has the following actions available:
+            ${JSON.stringify(actions)}
+
+            Response:
+            In the parameters section, you can provide the parameters required for the action. 
+            If the action does not require any parameters, you can leave the parameters section empty. 
+            If many parameters are required, you can provide them in the parameters section as an array of objects.
+            Always respond with a valid JSON object that matches the structure below. 
+            Do not include any additional text, explanations, or comments outside the JSON.
+
+
+            Expected output json: 
+            {
+                "uuid": "action uuid",
+                "name": "action name",
+                "description": "action description",
+                "parameters": [
+                    {
+                        "name": "parameter name",
+                        "value": "parameter value"
+                    }
+                ]
+            }
+        `;
+
+        let attempts = 0;
+    const maxAttempts = 10;
+
+    while (attempts < maxAttempts) {
+        try {
+            // Wywołanie modelu AI
+            const response = await this.aiModel.chat(
+                [
+                    {
+                        role: "system",
+                        content: systemPrompt
+                    },
+                    {
+                        role: "user",
+                        content: userPrompt
+                    }
+                ],
+            );
 
             // Parsowanie odpowiedzi
             const parsedResponse = JSON.parse(response.message.content);
