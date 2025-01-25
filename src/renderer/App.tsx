@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useAssistantMessages } from "./hooks/useAssistantMessages";
 import { MessageHistory, TextInput } from "./components"
 import { useYoozekStore } from "./store/store";
@@ -8,6 +8,16 @@ const App: React.FC = () => {
 
     const messages = useYoozekStore(state => state.messages)
     const setMessage = useYoozekStore(state => state.setMessage)
+    const messageListRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (messageListRef.current) {
+            messageListRef.current.scrollTo({
+                top: messageListRef.current.scrollHeight,
+                behavior: "smooth"
+            });
+        }
+    }, [messages]);
 
     useAssistantMessages((message) =>
         setMessage(message)
@@ -20,7 +30,7 @@ const App: React.FC = () => {
 
     return (
         <>
-            <MessageHistory messages={Object.values(messages)}/>
+            <MessageHistory ref={messageListRef} messages={Object.values(messages)}/>
             <TextInput onEnterPress={handleEnterPress}/>
         </>
     );

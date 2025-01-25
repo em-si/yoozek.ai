@@ -1,8 +1,7 @@
-
 import { Llama323 } from "./assistant/AiModel";
 import { AssistantService } from "./assistant/AssistantService";
 import { getZones } from "./haservice/haservices";
-import { availableTools, homeAssistantTool } from "./tools";
+import { availableTools, homeAssistantTool, informTool, todoTool } from "./tools";
 import { Action, Tool, toolToSimple } from "./types/generalTypes";
 
 export const yoozek = async (userMessage: string): Promise<string> => {
@@ -23,8 +22,10 @@ export const yoozek = async (userMessage: string): Promise<string> => {
     if (tool.uuid === homeAssistantTool.uuid) {
         action = await assistant.extractAction(userMessage, simpleTool, tool.actions, `Available zones in which the action can be performed: 
             ${JSON.stringify(getZones())}`);
-    } else {
+    } else if (tool.uuid === todoTool.uuid) {
         action = await assistant.extractAction(userMessage, simpleTool, tool.actions);
+    } else if (tool.uuid === informTool.uuid) {
+        return await assistant.informUser(userMessage)
     }
 
     console.log(`\n\nAction:`, action);

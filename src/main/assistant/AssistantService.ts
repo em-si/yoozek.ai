@@ -1,8 +1,7 @@
-import { contentTracing } from "electron";
 import { Action, SimpleTool, Tool } from "../types/generalTypes";
-import { AiChatMessage, AiChatResponse, AiGenerateResponse, AiModel } from "./AiModel";
+import { AiModel } from "./AiModel";
 import { mapTypeToFormat } from "./FormatMapper";
-import { Zone } from "../types/haTypes";
+import { informPrompt } from "./prompts";
 
 const SimpleToolFormat: Record<string, string> = {
     uuid: "string",
@@ -125,5 +124,23 @@ export class AssistantService {
         );
 
         return JSON.parse(response.message.content);
+    }
+
+    async informUser(userPrompt: string): Promise<string> {
+
+        const response = await this.aiModel.chat(
+            [
+                {
+                    role: "system",
+                    content: informPrompt
+                },
+                {
+                    role: "user",
+                    content: userPrompt
+                }
+            ]
+        );
+
+        return response.message.content;
     }
 }
