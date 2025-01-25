@@ -8,11 +8,7 @@ export function getZones(): Zone[] {
     return zones;
 }
 
-export function getDevices(zoneId: string): Device[] | undefined {
-    const zone = zones.find(z => z.uuid === zoneId);
-    return zone ? zone.devices : undefined;
-}
-
+// Get And Set Status
 export function setStatus(deviceId: string, stateName: string, newValue: string | number | boolean): Device | undefined {
     for (const zone of zones) {
         const device = zone.devices.find(d => d.uuid === deviceId);
@@ -34,12 +30,13 @@ export function getStatus(deviceId: string): State[] | undefined {
     }
     return undefined;
 }
-
-export function getDeviceFromZone(zoneId: string, deviceId: string): Device | undefined {
+// Get Device and Device from Zone 
+export function getDevices(zoneId: string): Device[] | undefined {
     const zone = zones.find(z => z.uuid === zoneId);
-    return zone ? zone.devices.find(d => d.uuid === deviceId) : undefined;
+    return zone ? zone.devices : undefined;
 }
 
+//report Stuff
 export function getReport(deviceId: string, from: Date, to: Date): string {
     for (const zone of zones) {
         const device = zone.devices.find(d => d.uuid === deviceId);
@@ -73,22 +70,7 @@ export function getReportForZone(zoneId: string, from: Date, to: Date): string {
 export function saveReportToFile(report: string, filePath: string): void {
     fs.writeFileSync(filePath, report, 'utf8');
 }
-
-function updateDeviceState(device: Device, stateName: string, newValue: string | number | boolean): Device {
-    const updatedStates = device.state.map(state => 
-        state.name === stateName ? { ...state, value: newValue } : state
-    );
-    return { ...device, state: updatedStates };
-}
-
-export function executeAction(device: Device, action: Action): Device {
-    const updatedStates = device.state.map(state => {
-        const param = action.parameters.find(p => p.name === state.name);
-        return param ? { ...state, value: param.value } : state;
-    });
-    return { ...device, state: updatedStates };
-}
-
+//Get and update Device State
 export function getDeviceStateInZone(zoneId: string, deviceId: string, stateName: string): string | number | boolean | undefined {
     const zone = zones.find(z => z.uuid === zoneId);
     if (zone) {
@@ -100,3 +82,19 @@ export function getDeviceStateInZone(zoneId: string, deviceId: string, stateName
     }
     return undefined;
 }
+
+function updateDeviceState(device: Device, stateName: string, newValue: string | number | boolean): Device {
+    const updatedStates = device.state.map(state => 
+        state.name === stateName ? { ...state, value: newValue } : state
+    );
+    return { ...device, state: updatedStates };
+}
+//Execution
+export function executeAction(device: Device, action: Action): Device {
+    const updatedStates = device.state.map(state => {
+        const param = action.parameters.find(p => p.name === state.name);
+        return param ? { ...state, value: param.value } : state;
+    });
+    return { ...device, state: updatedStates };
+}
+// Kiedyś tu będzie dodawaniew pokoi i urządzeń
