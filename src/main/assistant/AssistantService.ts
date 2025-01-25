@@ -43,7 +43,10 @@ export class AssistantService {
             Available Tools:
             ${JSON.stringify(tools)}
             If the tool is not available, please inform the user.
-            DO NOT CREATE NEW TOOLS OR ACTIONS.
+            Warning:
+            If you generate or suggest a tool not explicitly listed, it will be treated as an error. 
+            Always use one of the predefined tools:${JSON.stringify(tools)}. Never guess or invent new tools.
+
 
             Expected Output (in JSON format):
             {
