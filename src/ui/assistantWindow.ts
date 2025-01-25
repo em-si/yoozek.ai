@@ -1,4 +1,6 @@
 import { app, BrowserWindow, globalShortcut } from 'electron';
+import { sendToRenderer } from "../ipc/ipc-main";
+import { IPCChannels } from "../ipc/ipc-types";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -33,9 +35,10 @@ const createAssistantWindow = async (): Promise<void> => {
 
 };
 
-const setAssistantMessage = (message: string): void => {
+const setAssistantMessage = async (message: string): Promise<void> => {
     if (progressWindow) {
-        progressWindow.webContents.send('new-assistant-message-entry', { role: 'assistant', text: message })
+        await sendToRenderer(progressWindow, IPCChannels.SendAssistantMessage, { role: 'assistant', text: message })
+
         progressWindow.webContents.scrollToBottom()
     }
 }

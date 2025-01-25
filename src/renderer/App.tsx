@@ -2,6 +2,7 @@ import React from "react";
 import { useAssistantMessages } from "./hooks/useAssistantMessages";
 import { MessageHistory, TextInput } from "./components"
 import { useYoozekStore } from "./store/store";
+import { IPCChannels } from "../ipc/ipc-types";
 
 const App: React.FC = () => {
 
@@ -12,8 +13,8 @@ const App: React.FC = () => {
         setMessage(message)
     )
 
-    const handleEnterPress = (text: string) => {
-        window.listeners.userMessage({ role: "user", text })
+    const handleEnterPress = async (text: string) => {
+        window.api.send(IPCChannels.SendUserMessage, { role: "user", text })
         setMessage({ role: "user", text })
     }
 

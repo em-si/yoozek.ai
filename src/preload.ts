@@ -1,29 +1,10 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
-import {contextBridge, ipcRenderer} from "electron";
-import { AssistantMessage, UserMessage } from "./types";
+import { contextBridge, ipcRenderer } from "electron";
+import { IPCRequestMap } from "./types";
 
-
-contextBridge.exposeInMainWorld('listeners', {
-    assistantMessage: (func: (message: AssistantMessage) => void) => {
-        ipcRenderer.on('new-assistant-message-entry', (__, message) => {
-            func(message);
-        });
-    },
-    userMessage: (message: UserMessage) => {
-        ipcRenderer.send('user-message', message);
-    },
-    showProgressBar: (func: (show: boolean) => void) => {
-        ipcRenderer.on('show-progress-bar', (__) => {
-            func(true);
-        });
-        ipcRenderer.on('hide-progress-bar', (__) => {
-            func(false);
-        });
-    },
-    onClipboardClick: (content: string) => {
-        console.log('clipboard clicked', content);
-        ipcRenderer.send('clipboard-clicked', content);
-    }
+contextBridge.exposeInMainWorld('api', {
+    send: <T extends keyof IPCRequestMap>(channel: T, payload: IPCRequestMap[T]) => ipcRenderer.send(channel, payload),
+    receive: <T extends keyof IPCRequestMap>(channel: T, func: (event: Electron.IpcRendererEvent, payload: IPCRequestMap[T]) => void) => ipcRenderer.on(channel, func),
 });
