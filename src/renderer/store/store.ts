@@ -14,7 +14,7 @@ const initialState: State = {
     messages: {
         [uuidv4()]: {
             role: "assistant",
-            text: "Siema, tutaj Yoozek, jak Ci mogę pomóc?!"
+            text: "Hello there, Yoozek here, how can i help yout?!"
         }
     }
 }

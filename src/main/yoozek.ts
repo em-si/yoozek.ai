@@ -30,5 +30,5 @@ export const yoozek = async (userMessage: string): Promise<string> => {
 
     console.log(`\n\nAction:`, action);
 
-    return action.uuid;
+    return JSON.stringify(action) + "\n\n" + JSON.stringify(action);
 }
