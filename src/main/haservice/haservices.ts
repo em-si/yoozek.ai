@@ -1,6 +1,6 @@
-import { Zone,Device,State } from "../haTypes"; 
-import { Action } from "../generalTypes";
-import { kitchen, livingroom, bedroom, bathoom, garage, garden} from "../HAService/hastates";
+import { Zone,Device,State } from "../types/haTypes"; 
+import { Action } from "../types/generalTypes";
+import { kitchen, livingroom, bedroom, bathoom, garage, garden} from "./hastates";
 import * as fs from 'fs';
 let zones: Zone[] = [ kitchen, livingroom, bedroom, bathoom, garage, garden];
 

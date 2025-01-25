@@ -14,7 +14,7 @@ const createWindow = async (): Promise<void> => {
     // TODO Tutaj piszecie swój zajebisty kod :D
     useUserMessage(async (message) => {
         const response = await yoozek(message.text);
-        setAssistantMessage(response);
+        await setAssistantMessage(response);
     });
 };
 

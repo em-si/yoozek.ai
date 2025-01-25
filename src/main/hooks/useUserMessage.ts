@@ -1,6 +1,11 @@
-import { ipcMain } from "electron";
 import { UserMessage } from "../../types";
+import { onMainIpc } from "../../ipc/ipc-main";
+import { IPCChannels } from "../../ipc/ipc-types";
+import { scrollToBottom } from "../../ui/assistantWindow";
 
 export const useUserMessage = (callback: (message: UserMessage) => void) => {
-    ipcMain.on("user-message", (_, message) => callback(message));
+    onMainIpc(IPCChannels.SendUserMessage, async (_, message) => {
+        callback(message);
+        scrollToBottom()
+    })
 }
