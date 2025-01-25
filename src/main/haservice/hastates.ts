@@ -1,4 +1,4 @@
-import { Zone,Device,State } from "../haTypes"; 
+import { Zone,Device,State } from "../../haTypes"; 
 const kitchen: Zone = {
     uuid: "zone-1",
     name: "Kitchen",

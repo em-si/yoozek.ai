@@ -1,4 +1,5 @@
-import { HttpClient } from "../network/httpClient";
+import { HttpClient } from "../network/HttpClient";
+
 
 export interface AiModel {
     
