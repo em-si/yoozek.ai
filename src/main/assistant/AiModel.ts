@@ -32,7 +32,7 @@ export interface AiModel {
 
     generate(prompt: string, jsonFormat: boolean): Promise<AiGenerateResponse>;
     chatWithFormat(messages: AiChatMessage[], format: Record<string, string>): Promise<AiChatResponse>;
-    chat(messages: AiChatMessage[]): Promise<AiChatResponse>;
+    chat(messages: AiChatMessage[], jsonFormat: boolean): Promise<AiChatResponse>;
 };
 
 export const Llama323: AiModel = {
@@ -67,11 +67,20 @@ export const Llama323: AiModel = {
         })
     },
 
-    async chat(messages: AiChatMessage[]): Promise<AiChatResponse> {
-        return this.httpClient.post("/chat", {
-            model: this.model,
-            messages: messages,
-            stream: false,
-        })
+    async chat(messages: AiChatMessage[], jsonFormat: boolean): Promise<AiChatResponse> {
+        if (jsonFormat) {
+            return this.httpClient.post("/chat", {
+                model: this.model,
+                messages: messages,
+                stream: false,
+                format: "json",
+            })
+        } else {
+            return this.httpClient.post("/chat", {
+                model: this.model,
+                messages: messages,
+                stream: false,
+            })
+        }
     }
 }

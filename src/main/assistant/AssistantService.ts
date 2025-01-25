@@ -10,6 +10,18 @@ const SimpleToolFormat: Record<string, string> = {
     description: "string"
 };
 
+// const ActionFormat: Record<string, string> = {
+//     uuid: "string",
+//     name: "string",
+//     description: "string",
+//     parameters: [
+//         {
+//             name: "string",
+//             value: "string"
+//         }
+//     ]
+// }
+
 export class AssistantService {
 
     private aiModel: AiModel;
@@ -28,6 +40,7 @@ export class AssistantService {
 
             Objective:
             Based on the user's request, provide the tool that best matches the user's needs.
+            Pay attention to correcly map the user's request to the available tools.
 
             Available Tools:
             ${JSON.stringify(tools)}
@@ -61,7 +74,7 @@ export class AssistantService {
 
     async extractAction(userPrompt: string, choosenTool: SimpleTool, actions: Action[], additionalInfo: string = ""): Promise<Tool> {
 
-        // const mappedAction = mapTypeToFormat(Action);
+        // const mappedAction = mapTypeToFormat(ActionFormat);
 
         const systemPrompt = `
             Persona: 
@@ -108,6 +121,7 @@ export class AssistantService {
                     content: userPrompt
                 }
             ],
+            true
         );
 
         return JSON.parse(response.message.content);

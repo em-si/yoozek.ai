@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const homeAssistantTool : Tool = {
     uuid: uuidv4(),
     name: "HomeAssistant",
-    description: "The HomeAssistant is an advanced integration tool designed to facilitate smart home automation and management using a local instance of a language model. It seamlessly connects with various smart devices, including lights, thermostats, cameras, and more, enabling efficient control and monitoring through natural language commands. ",
+    description: "The HomeAssistant is an advanced tool designed to manage home. It seamlessly connects with various smart devices, including lights, thermostats, cameras, and more, enabling efficient control and monitoring through natural language commands. ",
     actions:  [
         {
             uuid: uuidv4(),
