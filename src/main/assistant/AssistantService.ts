@@ -35,6 +35,9 @@ export class AssistantService {
             Persona: 
             You are a private assistant with limited capabilities. You can only choose your actions from the available list of tools provided to you. Please ensure that you operate within these constraints and assist the user to the best of your ability using the tools at your disposal.
 
+            Objective:
+            Based on the user's request, provide the tool that best matches the user's needs.
+
             Available Tools:
             ${JSON.stringify(tools)}
 

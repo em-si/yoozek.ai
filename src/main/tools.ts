@@ -121,4 +121,23 @@ const todoTool : Tool = {
 
 };
 
-export const availableTools = [ homeAssistantTool, todoTool ];
+const informTool : Tool = {
+    uuid: uuidv4(),
+    name: "Inform",
+    description: "The Inform tool is designed to notify the user when no other tools is suitable to perform the requested action. It provides a fallback mechanism to ensure the user is always informed, even if the assistant cannot find the best tool to handle the request.",
+    actions: [
+        {
+            uuid: uuidv4(),
+            name: "sendMessage",
+            description: "This action sends message to the user",
+            parameters: [
+                {
+                    name: "message",
+                    value: "string"
+                }
+            ]
+        }
+    ]
+};
+
+export const availableTools = [ informTool, homeAssistantTool, todoTool ];
