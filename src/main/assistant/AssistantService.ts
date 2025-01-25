@@ -84,7 +84,12 @@ export class AssistantService {
             ${JSON.stringify(actions)}
 
             Response:
-            In the parameters section, you can provide the parameters required for the action. If the action does not require any parameters, you can leave the parameters section empty. If many parameters are required, you can provide them in the parameters section as an array of objects.
+            In the parameters section, you can provide the parameters required for the action. 
+            If the action does not require any parameters, you can leave the parameters section empty. 
+            If many parameters are required, you can provide them in the parameters section as an array of objects.
+            Always respond with a valid JSON object that matches the structure below. 
+            Do not include any additional text, explanations, or comments outside the JSON.
+
 
             Expected output json: 
             {
@@ -100,21 +105,41 @@ export class AssistantService {
             }
         `;
 
-        console.log(`System Prompt:`, systemPrompt);
+        let attempts = 0;
+    const maxAttempts = 10;
 
-        const response = await this.aiModel.chat(
-            [
-                {
-                    role: "system",
-                    content: systemPrompt
-                },
-                {
-                    role: "user",
-                    content: userPrompt
-                }
-            ],
-        );
+    while (attempts < maxAttempts) {
+        try {
+            // Wywołanie modelu AI
+            const response = await this.aiModel.chat(
+                [
+                    {
+                        role: "system",
+                        content: systemPrompt
+                    },
+                    {
+                        role: "user",
+                        content: userPrompt
+                    }
+                ],
+            );
 
-        return JSON.parse(response.message.content);
+            // Parsowanie odpowiedzi
+            const parsedResponse = JSON.parse(response.message.content);
+
+            // Walidacja wymaganego formatu JSON
+            if (parsedResponse.uuid && parsedResponse.name && parsedResponse.description) {
+                return parsedResponse; // Poprawny JSON
+            } else {
+                throw new Error("Response JSON is missing required fields.");
+            }
+        } catch (error) {
+            console.warn(`Attempt ${attempts + 1}: Failed to parse JSON. Error:`, error.message);
+            attempts++;
+        }
+    }
+
+    // Jeśli po 10 próbach nie udało się uzyskać poprawnego JSON
+    throw new Error("Failed to get a valid JSON response after 10 attempts.");
     }
 }

@@ -38,7 +38,7 @@ export interface AiModel {
 export const Llama323: AiModel = {
 
     httpClient: new HttpClient("http://localhost:11434/api"),
-    model: "phi:latest",
+    model: "Llama3.2:3b",
 
     async generate(prompt: string, jsonFormat: boolean = false): Promise<AiGenerateResponse> {
 
