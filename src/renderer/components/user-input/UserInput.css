@@ -1,0 +1,28 @@
+.text-input-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.text-input {
+    width: 90%; /* Full width with some padding */
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Light border */
+    border-radius: 25px; /* Rounded corners */
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+    color: white;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.text-input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Lighter placeholder color */
+    font-style: italic;
+}
+
+.text-input:focus {
+    outline: none;
+    border-color: #81c784; /* Highlighted border on focus */
+    box-shadow: 0 0 5px rgba(129, 199, 132, 0.8); /* Soft glow effect */
+}

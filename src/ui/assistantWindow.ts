@@ -1,4 +1,4 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, globalShortcut} from 'electron';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -7,7 +7,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 let progressWindow: BrowserWindow | null = null;
 
 // Tworzenie okna paska postępu
-const createAssistantWindow = (): void => {
+const createAssistantWindow = async (): Promise<void> => {
     if (progressWindow) {
         progressWindow.show()
         progressWindow.focus(); // Jeśli okno istnieje, skup się na nim
@@ -15,24 +15,27 @@ const createAssistantWindow = (): void => {
     }
 
     progressWindow = new BrowserWindow({
-        width: 600,
-        height: 300,
+        width: 800,
+        height: 800,
         vibrancy: 'popover',
         backgroundMaterial: 'acrylic',
         webPreferences: {
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
         }
     });
-    //progressWindow.setWindowButtonVisibility(false)
-    progressWindow.webContents.openDevTools()
 
     // HTML treść okna
-    progressWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+    await progressWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+
+    globalShortcut.register('F12', () => {
+        progressWindow?.webContents.toggleDevTools(); // Toggles DevTools on F12 key press
+    });
+
 };
 
 const setUserMessage = (message: string): void => {
     if (progressWindow) {
-        progressWindow.webContents.send('new-user-message', message)
+        progressWindow.webContents.send('new-user-message-entry', message)
         setTimeout(() => {
             progressWindow?.webContents?.scrollToBottom()
         }, 500)
@@ -41,7 +44,7 @@ const setUserMessage = (message: string): void => {
 
 const setAssistantMessage = (message: string): void => {
     if (progressWindow) {
-        progressWindow.webContents.send('new-assistant-message', message)
+        progressWindow.webContents.send('new-assistant-message-entry', message)
         progressWindow.webContents.scrollToBottom()
     }
 }
@@ -60,6 +63,8 @@ const hideProgressBar = () => {
 
 app.on('window-all-closed', () => {
     progressWindow = null
+    globalShortcut.unregister('F12');
+
 })
 
 // Eksport funkcji
