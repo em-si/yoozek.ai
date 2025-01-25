@@ -25,7 +25,7 @@ export const homeAssistantTool : Tool = {
         {
             uuid: uuidv4(),
             name: "setStatus",
-            description: "This action sets the status of a device.",
+            description: "This action sets the status of a device, like turning on or off, changing the temperature, etc.",
             parameters: [
                 {
                     name: "deviceId",
