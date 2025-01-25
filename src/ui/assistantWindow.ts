@@ -1,4 +1,4 @@
-import {app, BrowserWindow, globalShortcut} from 'electron';
+import { app, BrowserWindow, globalShortcut } from 'electron';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -33,18 +33,9 @@ const createAssistantWindow = async (): Promise<void> => {
 
 };
 
-const setUserMessage = (message: string): void => {
-    if (progressWindow) {
-        progressWindow.webContents.send('new-user-message-entry', message)
-        setTimeout(() => {
-            progressWindow?.webContents?.scrollToBottom()
-        }, 500)
-    }
-}
-
 const setAssistantMessage = (message: string): void => {
     if (progressWindow) {
-        progressWindow.webContents.send('new-assistant-message-entry', message)
+        progressWindow.webContents.send('new-assistant-message-entry', { role: 'assistant', text: message })
         progressWindow.webContents.scrollToBottom()
     }
 }
@@ -68,4 +59,4 @@ app.on('window-all-closed', () => {
 })
 
 // Eksport funkcji
-export {createAssistantWindow, setUserMessage, setAssistantMessage, showProgressBar, hideProgressBar};
+export { createAssistantWindow, setAssistantMessage, showProgressBar, hideProgressBar };

@@ -1,5 +1,5 @@
 import { app, BrowserWindow, clipboard, ipcMain } from 'electron';
-import { createAssistantWindow } from "./ui/assistantWindow";
+import { createAssistantWindow, setAssistantMessage } from "./ui/assistantWindow";
 import { useUserMessage } from "./main/hooks/useUserMessage";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -11,7 +11,9 @@ const createWindow = async (): Promise<void> => {
     // Create the browser window.
     await createAssistantWindow();
     // TODO Tutaj piszecie swój zajebisty kod :D
-    useUserMessage((message) => console.log(message));
+    useUserMessage((message) => {
+        setAssistantMessage(message.text)
+    });
 };
 
 // This method will be called when Electron has finished

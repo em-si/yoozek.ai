@@ -12,9 +12,9 @@ const App: React.FC = () => {
         setMessage(message)
     )
 
-    const handleEnterPress = (content: string) => {
-        window.listeners.userMessage({ content })
-        setMessage({ role: "user", text: content })
+    const handleEnterPress = (text: string) => {
+        window.listeners.userMessage({ role: "user", text })
+        setMessage({ role: "user", text })
     }
 
     return (

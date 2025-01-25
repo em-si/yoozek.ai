@@ -2,15 +2,16 @@
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 
 import {contextBridge, ipcRenderer} from "electron";
+import { AssistantMessage, UserMessage } from "./types";
 
 
 contextBridge.exposeInMainWorld('listeners', {
-    assistantMessage: (func: (message: string) => void) => {
+    assistantMessage: (func: (message: AssistantMessage) => void) => {
         ipcRenderer.on('new-assistant-message-entry', (__, message) => {
             func(message);
         });
     },
-    userMessage: (message: string) => {
+    userMessage: (message: UserMessage) => {
         ipcRenderer.send('user-message', message);
     },
     showProgressBar: (func: (show: boolean) => void) => {

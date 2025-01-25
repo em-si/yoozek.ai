@@ -28,13 +28,14 @@
 
 import './index.css';
 import './renderer/index'
+import { AssistantMessage, UserMessage } from "./types";
 
 
 declare global {
     interface Window {
         listeners: {
-            assistantMessage: (callback: (message: {id?: string, content: string}) => void) => void;
-            userMessage: (message: {id?: string, content: string}) => void;
+            assistantMessage: (callback: (message: AssistantMessage) => void) => void;
+            userMessage: (message: UserMessage) => void;
             showProgressBar: (func: (show: boolean) => void) => void;
             onClipboardClick: (content: string) => void;
         };
