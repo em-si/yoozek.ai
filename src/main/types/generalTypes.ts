@@ -1,7 +1,10 @@
-export type Tool = {
+export type SimpleTool = {
     uuid: string;
     name: string;
     description: string;
+};
+
+export type Tool = SimpleTool & {
     actions: Action[];
 };
 
@@ -9,7 +12,7 @@ export type Action = {
     uuid: string;
     name: string;
     description: string;
-    parameters: Parameter[];
+    parameters?: Parameter[];
 };
 
 export type Parameter = {

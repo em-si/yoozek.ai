@@ -1,19 +1,13 @@
 import { HttpClient } from "../network/HttpClient";
 
-
-export interface AiModel {
-    
-    httpClient: HttpClient;
-    model: string;
-
-    ask(prompt: string, stream: boolean, jsonFormat: boolean): Promise<AiResponse>;
-
-}
+export type AiChatMessage = {
+    role: string;
+    content: string;
+};
 
 export type AiResponse = {
     model: string;
     created_at: string;
-    response: string;
     done: boolean;
     total_duration: number;
     load_duration: number;
@@ -21,14 +15,31 @@ export type AiResponse = {
     prompt_eval_duration: number;
     eval_count: number;
     eval_duration: number;
+}
+
+export type AiGenerateResponse = AiResponse & {
+    response: string;
 };
+
+export type AiChatResponse = AiResponse & {
+    message: AiChatMessage;
+};
+
+export interface AiModel {
+
+    httpClient: HttpClient;
+    model: string;
+
+    generate(prompt: string, stream: boolean, jsonFormat: boolean): Promise<AiGenerateResponse>;
+    chat(messages: AiChatMessage[], stream: boolean, format: string): Promise<AiChatResponse>;
+}
 
 export const Llama323: AiModel = {
 
     httpClient: new HttpClient("http://localhost:11434/api"),
-    model : "llama3.2:3b",
+    model: "phi:latest",
 
-    async ask(prompt: string, stream: boolean = false, jsonFormat: boolean = false): Promise<AiResponse> {
+    async generate(prompt: string, stream: boolean = false, jsonFormat: boolean = false): Promise<AiGenerateResponse> {
 
         if (jsonFormat) {
             return this.httpClient.post("/generate", {
@@ -44,5 +55,14 @@ export const Llama323: AiModel = {
                 prompt: prompt,
             })
         }
+    },
+
+    async chat(messages: AiChatMessage[], stream: boolean = false, format: string): Promise<AiChatResponse> {
+        return this.httpClient.post("/chat", {
+            model: this.model,
+            stream: stream,
+            messages: messages,
+            format: format
+        })
     }
 }
