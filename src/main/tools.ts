@@ -1,7 +1,7 @@
 import { Tool } from "./types/generalTypes";
 import { v4 as uuidv4 } from 'uuid';
 
-const homeAssistantTool : Tool = {
+export const homeAssistantTool : Tool = {
     uuid: uuidv4(),
     name: "HomeAssistant",
     description: "The HomeAssistant is an advanced integration tool designed to facilitate smart home automation and management using a local instance of a language model. It seamlessly connects with various smart devices, including lights, thermostats, cameras, and more, enabling efficient control and monitoring through natural language commands. ",
@@ -51,7 +51,7 @@ const homeAssistantTool : Tool = {
     ]
 }
 
-const todoTool : Tool = {
+export const todoTool : Tool = {
     uuid: uuidv4(),
     name: "Todo",
     description: "The Todo is a specialized tool designed for effective task management and organization, leveraging a local language model. It is tailored to help users create, edit, and manage their to-do lists and tasks through intuitive natural language interactions.",
@@ -121,7 +121,7 @@ const todoTool : Tool = {
 
 };
 
-const informTool : Tool = {
+export const informTool : Tool = {
     uuid: uuidv4(),
     name: "Inform",
     description: "The Inform tool is designed to notify the user when no other tools is suitable to perform the requested action. It provides a fallback mechanism to ensure the user is always informed, even if the assistant cannot find the best tool to handle the request.",

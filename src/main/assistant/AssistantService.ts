@@ -1,7 +1,8 @@
 import { contentTracing } from "electron";
-import { SimpleTool } from "../types/generalTypes";
+import { Action, SimpleTool, Tool } from "../types/generalTypes";
 import { AiChatMessage, AiChatResponse, AiGenerateResponse, AiModel } from "./AiModel";
 import { mapTypeToFormat } from "./FormatMapper";
+import { Zone } from "../types/haTypes";
 
 const SimpleToolFormat: Record<string, string> = {
     uuid: "string",
@@ -17,23 +18,13 @@ export class AssistantService {
         this.aiModel = aiModel;
     }
 
-    // async generate(prompt: string, stream: boolean = false, jsonFormat: boolean = false): Promise<AiGenerateResponse> {
-    //     return this.aiModel.generate(prompt, stream, jsonFormat);
-    // }
-
-    // async chat(messages: AiChatMessage[], stream: boolean = false): Promise<AiChatResponse> {
-    //     return this.aiModel.chat(messages, stream);
-    // }
-
-    async reasoning(userPrompt: string, tools: SimpleTool[]): Promise<SimpleTool> {
+    async extractTool(userPrompt: string, tools: SimpleTool[]): Promise<SimpleTool> {
 
         const mappedTool = mapTypeToFormat(SimpleToolFormat);
 
-        console.log(`Mapped Tool:`, mappedTool);
-
         const systemPrompt = `
             Persona: 
-            You are a private assistant with limited capabilities. You can only choose your actions from the available list of tools provided to you. Please ensure that you operate within these constraints and assist the user to the best of your ability using the tools at your disposal.
+            You are a private assistant with limited capabilities. You can only choose one tool from the available list of tools provided to you. Please ensure that you operate within these constraints and assist the user to the best of your ability using the tools at your disposal.
 
             Objective:
             Based on the user's request, provide the tool that best matches the user's needs.
@@ -51,6 +42,61 @@ export class AssistantService {
 
         console.log(`System Prompt:`, systemPrompt);
 
+        const response = await this.aiModel.chatWithFormat(
+            [
+                {
+                    role: "system",
+                    content: systemPrompt
+                },
+                {
+                    role: "user",
+                    content: userPrompt
+                }
+            ],
+            mappedTool
+        );
+
+        return JSON.parse(response.message.content);
+    }
+
+    async extractAction(userPrompt: string, choosenTool: SimpleTool, actions: Action[], additionalInfo: string = ""): Promise<Tool> {
+
+        // const mappedAction = mapTypeToFormat(Action);
+
+        const systemPrompt = `
+            Persona: 
+            You are a private assistant with limited capabilities. You can only choose one action from the available list of actions provided to you. Please ensure that you operate within these constraints and assist the user to the best of your ability using the tools at your disposal.
+
+            Objective:
+            Based on the user's request, earlier chosen tool and the available actions, provide the action that best matches the user's needs.
+
+            In the last step you have chosen the following tool:
+            ${JSON.stringify(choosenTool)}
+
+            ${additionalInfo}
+
+            This tool has the following actions available:
+            ${JSON.stringify(actions)}
+
+            Response:
+            In the parameters section, you can provide the parameters required for the action. If the action does not require any parameters, you can leave the parameters section empty. If many parameters are required, you can provide them in the parameters section as an array of objects.
+
+            Expected output json: 
+            {
+                "uuid": "action uuid",
+                "name": "action name",
+                "description": "action description",
+                "parameters": [
+                    {
+                        "name": "parameter name",
+                        "value": "parameter value"
+                    }
+                ]
+            }
+        `;
+
+        console.log(`System Prompt:`, systemPrompt);
+
         const response = await this.aiModel.chat(
             [
                 {
@@ -62,11 +108,7 @@ export class AssistantService {
                     content: userPrompt
                 }
             ],
-            false,
-            mappedTool
         );
-
-        console.log(`Raw response:`, response);
 
         return JSON.parse(response.message.content);
     }
