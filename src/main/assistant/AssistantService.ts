@@ -136,6 +136,7 @@ export class AssistantService {
                         content: userPrompt
                     }
                 ],
+                true
             );
 
             // Parsowanie odpowiedzi
