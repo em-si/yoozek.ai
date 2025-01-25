@@ -31,7 +31,7 @@ export interface AiModel {
     model: string;
 
     generate(prompt: string, stream: boolean, jsonFormat: boolean): Promise<AiGenerateResponse>;
-    chat(messages: AiChatMessage[], stream: boolean, format: string): Promise<AiChatResponse>;
+    chat(messages: AiChatMessage[], stream: boolean, format: Record<string, string>): Promise<AiChatResponse>;
 }
 
 export const Llama323: AiModel = {
@@ -57,7 +57,7 @@ export const Llama323: AiModel = {
         }
     },
 
-    async chat(messages: AiChatMessage[], stream: boolean = false, format: string): Promise<AiChatResponse> {
+    async chat(messages: AiChatMessage[], stream: boolean = false, format: Record<string, string>): Promise<AiChatResponse> {
         return this.httpClient.post("/chat", {
             model: this.model,
             stream: stream,

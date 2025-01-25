@@ -6,7 +6,7 @@ export type Note = {
     description: string;
     content: string;
     actions: Action[];
-}
+};
 
 export type Task = {
     uuid: string;

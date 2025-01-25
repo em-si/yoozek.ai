@@ -2,7 +2,7 @@
 import { Llama323 } from "./assistant/AiModel";
 import { AssistantService } from "./assistant/AssistantService";
 import { availableTools } from "./tools";
-import { Tool } from "./types/generalTypes";
+import { Tool, toolToSimple } from "./types/generalTypes";
 
 
 export const yoozek = async (userMessage: string): Promise<string> => {
@@ -11,7 +11,7 @@ export const yoozek = async (userMessage: string): Promise<string> => {
 
     const response = await assistant.reasoning(
         userMessage,
-        availableTools
+        availableTools.map(toolToSimple)
     );
 
     console.log(`Response: ${response.name}`);

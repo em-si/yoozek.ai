@@ -3,7 +3,7 @@ import { SimpleTool } from "../types/generalTypes";
 import { AiChatMessage, AiChatResponse, AiGenerateResponse, AiModel } from "./AiModel";
 import { mapTypeToFormat } from "./FormatMapper";
 
-const SimpleToolFormat : Record<string, string> = {
+const SimpleToolFormat: Record<string, string> = {
     uuid: "string",
     name: "string",
     description: "string"
@@ -31,14 +31,28 @@ export class AssistantService {
 
         console.log(`Mapped Tool:`, mappedTool);
 
+        const systemPrompt = `
+            Persona: 
+            You are a private assistant with limited capabilities. You can only choose your actions from the available list of tools provided to you. Please ensure that you operate within these constraints and assist the user to the best of your ability using the tools at your disposal.
+
+            Available Tools:
+            ${JSON.stringify(tools)}
+
+            Expected output json: 
+            {
+                "uuid": "tool uuid",
+                "name": "tool name",
+                "description": "tool description"
+            }
+        `;
+
+        console.log(`System Prompt:`, systemPrompt);
+
         const response = await this.aiModel.chat(
             [
                 {
                     role: "system",
-                    content: `
-                        You are a private assistant with limited capabilities. You can only choose your actions from the available list of tools provided to you. Please ensure that you operate within these constraints and assist the user to the best of your ability using the tools at your disposal.
-                        ${tools}
-                    `
+                    content: systemPrompt
                 },
                 {
                     role: "user",
@@ -46,9 +60,11 @@ export class AssistantService {
                 }
             ],
             false,
-            JSON.parse(mappedTool)
+            mappedTool
         );
 
-        return response.message as undefined as SimpleTool
+        console.log(`Raw response:`, response);
+
+        return JSON.parse(response.message.content);
     }
 }

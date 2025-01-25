@@ -8,6 +8,12 @@ export type Tool = SimpleTool & {
     actions: Action[];
 };
 
+export const toolToSimple = ({ uuid, name, description }: Tool): SimpleTool => ({
+    uuid,
+    name,
+    description
+});
+
 export type Action = {
     uuid: string;
     name: string;
