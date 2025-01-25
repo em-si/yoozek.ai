@@ -1,7 +1,7 @@
 import React from "react";
-import {Message} from "../../types";
 import {MessageEntry} from "../message-entry";
 import "./MessageHistory.css";
+import { Message } from "../../../types";
 
 type MessageHistoryProps = {
     messages: Message[];
